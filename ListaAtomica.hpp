@@ -2,6 +2,7 @@
 #define LISTA_ATOMICA_H__
 
 #include <atomic>
+#include <pthread.h>
 
 template <typename T>
 class Lista {
@@ -13,6 +14,8 @@ private:
 	};
 
 	std::atomic<Nodo *> _head;
+	pthread_mutex_t mutex;
+	
 
 public:
 	Lista() : _head(nullptr) {}
@@ -24,10 +27,18 @@ public:
 			n = n->_next;
 			delete t;
 		}
+		pthread_mutex_destroy(&mutexsum)
 	}
 
 	void push_front(const T& val) {
 		/* Completar. Debe ser atómico. */
+		Nodo *n=new Nodo(val);
+		pthread_mutex_lock(&mutex);
+		n->next=_head.load();
+		_head.store(n);
+		pthread_mutex_unlock(&mutex);
+		
+
 	}
 
 	T& front() const {
