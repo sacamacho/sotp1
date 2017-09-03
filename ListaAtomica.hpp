@@ -18,7 +18,9 @@ private:
 	
 
 public:
-	Lista() : _head(nullptr) {}
+	Lista() : _head(nullptr) {
+		pthread_mutex_init(&mutexsum,NULL);
+	}
 	~Lista() {
 		Nodo *n, *t;
 		n = _head.load();
@@ -27,7 +29,7 @@ public:
 			n = n->_next;
 			delete t;
 		}
-		pthread_mutex_destroy(&mutexsum)
+		pthread_mutex_destroy(&mutexsum);
 	}
 
 	void push_front(const T& val) {
