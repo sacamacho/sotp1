@@ -36,7 +36,7 @@ public:
 		/* Completar. Debe ser atómico. */
 		Nodo *n=new Nodo(val);
 		pthread_mutex_lock(&mutex);
-		n->next=_head.load();
+		n->_next=_head.load();
 		_head.store(n);
 		pthread_mutex_unlock(&mutex);
 		
