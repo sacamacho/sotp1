@@ -11,13 +11,13 @@ LDLIBS = -lpthread
 
 #BIN = test-2 test-3 test-5
 BIN = test-1
-#OBJ = ConcurrentHashMap.o
+OBJ = ConcurrentHashMap.o
 
 all: $(BIN)
 
 $(BIN): ListaAtomica.hpp
 
-test-1: test-1.cpp
+test-1: $(OBJ) test-1.cpp
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ test-1.cpp $(OBJ) $(LDLIBS)
 
 # test-2: $(OBJ) test-2.cpp

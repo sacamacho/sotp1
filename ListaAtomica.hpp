@@ -39,8 +39,6 @@ public:
 		n->_next=_head.load();
 		_head.store(n);
 		pthread_mutex_unlock(&mutex);
-		
-
 	}
 
 	T& front() const {

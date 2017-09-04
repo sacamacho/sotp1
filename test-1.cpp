@@ -1,5 +1,6 @@
 #include <iostream>
 #include "ListaAtomica.hpp"
+#include "ConcurrentHashMap.hpp"
 #include <vector>
 #define CANT_THREADS 4
 
@@ -15,12 +16,11 @@ void *pushea_front(void *lAP)
 {
 	ListAndPair lAPair = *((ListAndPair *) lAP);
 	lAPair._list->push_front(lAPair._p);
-	//printf("Hola mundo! Soy el thread nro. %d.\n", minumero);
 	return NULL;
 }
 
 int main(void) {
-
+	//TEST Lista::push_front();
 	cout << "----LISTA SIN PTHREADS----" << endl;
 	Lista<pair<string, unsigned int>> *l0= new Lista<pair<string, unsigned int>>;
 	pair<string, unsigned int> p1 = make_pair("(primer push_front) pos:", 3);
@@ -34,10 +34,9 @@ int main(void) {
 		cout << t.first << " " << t.second << endl;
 	}
 
-	Lista<pair<string, unsigned int>> *l= new Lista<pair<string, unsigned int>>;
-
-
+	//TEST Lista::push_front() CONCURRENTE;
 	cout << "----LISTA CON PTHREADS----" << endl;
+	Lista<pair<string, unsigned int>> *l= new Lista<pair<string, unsigned int>>;
 	pthread_t thread[CANT_THREADS]; int tid;
 	vector<ListAndPair*> lAP;
 	for (tid = 0; tid < CANT_THREADS; ++tid)
@@ -57,6 +56,8 @@ int main(void) {
 		cout << t.first << " " << t.second << endl;
 	}
 	delete l;
+
+
 
 	return 0;
 }
