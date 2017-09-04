@@ -1,5 +1,6 @@
 #include <iostream>
 #include "ListaAtomica.hpp"
+#include <vector>
 #define CANT_THREADS 4
 
 using namespace std;
@@ -12,8 +13,8 @@ struct ListAndPair {
 
 void *pushea_front(void *lAP)
 {
-	ListAndPair lAP = *(ListAndPair *) lAP;
-	lAP._list->push_front(lAP._p);
+	ListAndPair lAPair = *((ListAndPair *) lAP);
+	lAPair._list->push_front(lAPair._p);
 	//printf("Hola mundo! Soy el thread nro. %d.\n", minumero);
 	return NULL;
 }
@@ -35,16 +36,24 @@ int main(void) {
 
 	cout << "----LISTA CON PTHREADS----" << endl;
 	pthread_t thread[CANT_THREADS]; int tid;
+	vector<ListAndPair*> lAP;
 	for (tid = 0; tid < CANT_THREADS; ++tid)
-		ListAndPair lAP=new ListAndPair(l, make_pair("pusheo " + to_string(tid), 2^tid));
-		pthread_create(&thread[tid], NULL, pushea_front, &lAP);
+	{
+		lAP.push_back(new ListAndPair(l, make_pair("pusheo " + to_string(tid), tid*2)));
+		pthread_create(&thread[tid], NULL, pushea_front, lAP[tid]);
+	}
+
 	for (tid = 0; tid < CANT_THREADS; ++tid)
+	{
 		pthread_join(thread[tid], NULL);
+		delete lAP[tid];
+	}
 
 	for (auto it = l->CrearIt(); it.HaySiguiente(); it.Avanzar()) {
 		auto t = it.Siguiente();
 		cout << t.first << " " << t.second << endl;
 	}
+	delete l;
 
 	return 0;
 }
