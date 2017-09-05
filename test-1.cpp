@@ -57,6 +57,26 @@ int main(void) {
 	}
 	delete l;
 
+	cout << "----CHM BASICS----" << endl;
+	ConcurrentHashMap *cHM = new ConcurrentHashMap();
+	cout << "creado OK" << endl;
+
+	cHM->addAndInc("hola");
+	cHM->addAndInc("hola");
+	cHM->addAndInc("hola");
+	cHM->addAndInc("chau");
+	cHM->addAndInc("ahora");
+	cout << "Agregado de elementos:" << endl;
+	int i;
+	for (i = 0; i < 26; i++) {
+		for (auto it = cHM->tabla[i]->CrearIt(); it.HaySiguiente(); it.Avanzar()) {
+			auto t = it.Siguiente();
+			cout << t.first << " " << t.second << endl;
+		}
+	}
+	cout << "OK" << endl;
+
+
 
 
 	return 0;

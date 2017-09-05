@@ -2,15 +2,34 @@
 //define debug 0
 
 ConcurrentHashMap::ConcurrentHashMap() {
-    for (int i = 0; i < DIMENSION_TABLA; i++) {
-      Lista< pair<string, unsigned int> > * list = new Lista< pair<string, unsigned int> >();
-      tabla.push_back(list);
-    }
+  for (int i = 0; i < DIMENSION_TABLA; i++) {
+    Lista< pair<string, unsigned int> > * l = new Lista< pair<string, unsigned int> >();
+    tabla.push_back(l);
+  }
 }
-  
+
+void ConcurrentHashMap::addAndInc(string key){
+  char c = key.at(0);
+  unsigned int pos = calculoPosicion(c); //posicion en el arreglo.
+  bool existsEqual = false;
+  Lista<pair<string, unsigned int>> *l = tabla[pos];
+  for (auto it = l->CrearIt(); it.HaySiguiente(); it.Avanzar()) {
+    auto t = it.Siguiente();
+    if(key == t.first){
+      t.second += 1;
+      existsEqual = true;
+      break;
+    }
+    if(!existsEqual){
+      pair<string, unsigned int> p = make_pair(key,1);
+      l->push_front(p);
+    }
+  }
+}
+
 bool ConcurrentHashMap::member(string key){
   
-  unsigned int indice = calculoposicion(key[0]);
+  unsigned int indice = calculoPosicion(key.at(0));
   // creamos iterador para la lista
   auto itera = tabla[indice]->CrearIt();
 

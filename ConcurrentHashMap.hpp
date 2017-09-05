@@ -4,6 +4,7 @@
 #include <atomic>
 #include <vector>
 #include <string>
+#include <cstring>
 //#include <utility>
 #include <list>
 #include <iostream>
@@ -18,16 +19,16 @@
 using namespace std;
 
 class ConcurrentHashMap {
-	private:
-		vector< Lista < pair<string, unsigned int> >* > tabla;
-
-		unsigned int calculoposicion(const char letra){return (int)letra - 97;}
+	private:		
+		unsigned int calculoPosicion(const char letra){return (int)letra - 97;}
 
 	public:
 		ConcurrentHashMap(); //constructor
 		void addAndInc(string key); 
 		bool member(string key);
 		pair<string, unsigned int> maximum(unsigned int nt);
+
+		vector< Lista < pair<string, unsigned int> >* > tabla;
 		
 		// lo de arriba es de la clase, lo de abajo no
 		
