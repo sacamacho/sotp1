@@ -76,8 +76,11 @@ int main(void) {
 	}
 	cout << "OK" << endl;
 
-
-
+	bool isPresent;
+	isPresent = cHM->member("hola");
+	cout << isPresent << endl;
+	isPresent = cHM->member("holaaa");
+	cout << isPresent << endl;
 
 	return 0;
 }
