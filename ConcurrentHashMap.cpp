@@ -22,14 +22,14 @@ void ConcurrentHashMap::addAndInc(string key){
   for (auto it = l->CrearIt(); it.HaySiguiente(); it.Avanzar()) {
     auto t = it.Siguiente();
     if(key == t.first){
-      t.second += 1;
+      it.SiguienteRef()->_val.second += 1;
       existsEqual = true;
       break;
     }
-    if(!existsEqual){
-      pair<string, unsigned int> p = make_pair(key,1);
-      l->push_front(p);
-    }
+  }
+  if(!existsEqual){
+    pair<string, unsigned int> p = make_pair(key,1);
+    l->push_front(p);
   }
 }
 

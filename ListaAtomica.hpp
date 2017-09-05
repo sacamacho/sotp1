@@ -71,6 +71,10 @@ public:
 			return _nodo_sig->_val;
 		}
 
+		Nodo *SiguienteRef() {
+			return _nodo_sig;
+		}
+
 		void Avanzar() {
 			_nodo_sig = _nodo_sig->_next;
 		}
