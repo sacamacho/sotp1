@@ -70,3 +70,18 @@ bool ConcurrentHashMap::member(string key){
 // }
 
   
+ConcurrentHashMap ConcurrentHashMap::count_words(string arch) {
+                  
+  ConcurrentHashMap map;
+    
+  ifstream inFile;
+  inFile.open(arch.c_str()); 
+  string palabra;
+ 
+  while (inFile >> palabra) {
+    map.addAndInc(palabra);
+  }
+  inFile.close();
+
+  return map;
+}
