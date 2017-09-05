@@ -18,6 +18,11 @@
 
 using namespace std;
 
+struct strucMaximum{
+  atomic<int> *_pos;
+  vector<pair<string, unsigned int>> *_maxVector;
+};
+
 class ConcurrentHashMap {
    public:
 		ConcurrentHashMap(); //constructor
@@ -27,15 +32,15 @@ class ConcurrentHashMap {
 		pair<string, unsigned int> maximum(unsigned int nt);
 		vector< Lista < pair<string, unsigned int> >* > tabla;
 		static ConcurrentHashMap count_words(string arch);
-	private:		
+	private:
 		unsigned int calculoPosicion(const char letra){return (int)letra - 97;}
 		pthread_mutex_t mutex[DIMENSION_TABLA];
 		pthread_mutex_t mutex_maximum;
-
+		strucMaximum sMax;
+		static void *search_max(void * arg);
 	
 		// lo de arriba es de la clase, lo de abajo no
 		
-
         // void* cargoHashMap(void *thread_args); // en count_words necesita esto
 		// solicita la funcion con 3 argumentos diferentes, es así?
 	 //    ConcurrentHashMap count_words(list<string> archs); //Ejercicio 3

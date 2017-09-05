@@ -82,5 +82,7 @@ int main(void) {
 	isPresent = cHM->member("holaaa");
 	cout << isPresent << endl;
 
+	pair<string, unsigned int> pp = cHM->maximum(1);
+	cout << pp.first << " " << pp.second << endl;
 	return 0;
 }

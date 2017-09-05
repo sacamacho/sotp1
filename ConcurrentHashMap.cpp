@@ -1,14 +1,6 @@
 #include "ConcurrentHashMap.hpp"
 #define debug 0
 
-//ConcurrentHashMap::ConcurrentHashMap() {
-//  for (int i = 0; i < DIMENSION_TABLA; i++) {
-//    Lista< pair<string, unsigned int> > * l = new Lista< pair<string, unsigned int> >();
-//    tabla.push_back(l);
-//  }
-//}
-
-
 ConcurrentHashMap::ConcurrentHashMap() {
   // inicializamos listas vacias y mutex que usa la clase
   for (int i = 0; i < DIMENSION_TABLA; i++) {
@@ -26,28 +18,6 @@ ConcurrentHashMap::ConcurrentHashMap() {
 //   } 
 //   pthread_mutex_destroy(&mutex_maximum);
 // }
-
-//
-//void ConcurrentHashMap::addAndInc(string key){
-//  char c = key.at(0);
-//  unsigned int pos = calculoPosicion(c); //posicion en el arreglo.
-//  bool existsEqual = false;
-//  Lista<<string, unsigned int>> *l = tabla[pos];
-//  for (auto it = l->CrearIt(); it.HaySiguiente(); it.Avanzar()) {
-//    auto t = it.Siguiente();
-//    if(key == t.first){
-//      it.SiguienteRef()->_val.second += 1;
-//      existsEqual = true;
-//      break;
-//    }
-//  }
-//  if(!existsEqual){
-//    pair<string, unsigned int> p = make_pair(key,1);
-//    l->push_front(p);
-//  }
-//}
-
-//
 
 void ConcurrentHashMap::addAndInc(string key){
   char c = key.at(0);
@@ -97,10 +67,54 @@ bool ConcurrentHashMap::member(string key){
 }
 
 
-// pair<string, unsigned int> ConcurrentHashMap::maximum(unsigned int nt) {
-//   return make_pair("hola",1);
-// }
+pair<string, unsigned int> ConcurrentHashMap::maximum(unsigned int nt) {
 
+  pair<string, unsigned int> maxPair ("",0);
+  if(nt > DIMENSION_TABLA){nt=DIMENSION_TABLA;}
+
+  pthread_t thread[nt]; int tid;
+  atomic<int> atPos{0};
+  vector<pair<string, unsigned int>> maxVector(DIMENSION_TABLA);
+  sMax._pos= &atPos;
+  sMax._maxVector = &maxVector;
+
+  for (tid = 0; tid < nt; ++tid)
+  {
+    pthread_create(&thread[tid], NULL, search_max, &sMax);
+  }
+  for (tid = 0; tid < nt; ++tid)
+  {
+    pthread_join(thread[tid], NULL);
+  }
+
+  for(vector<pair<string, unsigned int>>::iterator it = maxVector.begin(); it != maxVector.end(); ++it )
+  {
+    if(it->second > maxPair.second){
+      maxPair = *it;
+    }
+  }
+
+  return maxPair;
+}
+
+void *ConcurrentHashMap::search_max(void * arg){
+  strucMaximum sMax = *((strucMaximum *) arg);
+  int dimTabla = DIMENSION_TABLA;
+  while(*(sMax._pos) < dimTabla){
+    int i = (*(sMax._pos)).fetch_add(1);
+
+    auto itera = tabla[i]->CrearIt();
+    pair<string, unsigned int> maxPair ("",0);
+
+    while(itera.HaySiguiente()) {
+      if(itera.Siguiente().second > maxPair.second)
+        maxPair = itera.Siguiente();
+      itera.Avanzar();
+    }
+    strucMaximum._maxVector[i] = maxPair;
+  }
+  
+}
 // pair<string, unsigned int> ConcurrentHashMap::maximum(unsigned int p_archivos, unsigned int p_maximos, list<string>archs) {
 //   return make_pair("hola",1);
 // }
