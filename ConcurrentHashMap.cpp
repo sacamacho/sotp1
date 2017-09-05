@@ -7,6 +7,13 @@ ConcurrentHashMap::ConcurrentHashMap() {
       tabla.push_back(list);
     }
 }
+
+ConcurrentHashMap::~ConcurrentHashMap(){
+	 for (int i = 0; i < DIMENSION_TABLA; i++) {
+	      delete tabla[i];
+    	}
+		
+}
   
 bool ConcurrentHashMap::member(string key){
   
