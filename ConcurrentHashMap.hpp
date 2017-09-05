@@ -24,6 +24,7 @@ class ConcurrentHashMap {
 
 	public:
 		ConcurrentHashMap(); //constructor
+		~ConcurrentHashMap();
 		void addAndInc(string key); 
 		bool member(string key);
 		pair<string, unsigned int> maximum(unsigned int nt);

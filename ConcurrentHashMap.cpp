@@ -8,6 +8,12 @@ ConcurrentHashMap::ConcurrentHashMap() {
   }
 }
 
+ConcurrentHashMap::~ConcurrentHashMap(){
+   for (int i = 0; i < DIMENSION_TABLA; i++) {
+        delete tabla[i];
+      } 
+}
+
 void ConcurrentHashMap::addAndInc(string key){
   char c = key.at(0);
   unsigned int pos = calculoPosicion(c); //posicion en el arreglo.
