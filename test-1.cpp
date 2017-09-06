@@ -76,13 +76,8 @@ int main(void) {
 	}
 	cout << "OK" << endl;
 
-	bool isPresent;
-	isPresent = cHM->member("hola");
-	cout << isPresent << endl;
-	isPresent = cHM->member("holaaa");
-	cout << isPresent << endl;
 
-	pair<string, unsigned int> pp = cHM->maximum(1);
-	cout << pp.first << " " << pp.second << endl;
+
+
 	return 0;
 }

@@ -18,32 +18,38 @@
 
 using namespace std;
 
-struct strucMaximum{
-  atomic<int> *_pos;
-  vector<pair<string, unsigned int>> *_maxVector;
-};
-
 class ConcurrentHashMap {
    public:
 		ConcurrentHashMap(); //constructor
-		// ~ConcurrentHashMap();
+		//*~ConcurrentHashMap();*/ 
 		void addAndInc(string key); 
 		bool member(string key);
 		pair<string, unsigned int> maximum(unsigned int nt);
 		vector< Lista < pair<string, unsigned int> >* > tabla;
 		static ConcurrentHashMap count_words(string arch);
-	private:
+		static ConcurrentHashMap count_words(list<string> archs); //Ejercicio 3
+		static ConcurrentHashMap count_words(unsigned int num_threads, list<string> archs);
+		static void* ArmoHashMap(void *thread_args);
+		static void* ArmoHashMapEj4(void *thread_args);
+	private:		
 		unsigned int calculoPosicion(const char letra){return (int)letra - 97;}
 		pthread_mutex_t mutex[DIMENSION_TABLA];
 		pthread_mutex_t mutex_maximum;
-		strucMaximum sMax;
-		static void *search_max(void * arg);
-	
-		// lo de arriba es de la clase, lo de abajo no
+
+	struct datos_thread { 
+		  unsigned int thread_id;
+		  ConcurrentHashMap* map;
+		  string archivo;
+		};
 		
-        // void* cargoHashMap(void *thread_args); // en count_words necesita esto
-		// solicita la funcion con 3 argumentos diferentes, es así?
-	 //    ConcurrentHashMap count_words(list<string> archs); //Ejercicio 3
+	struct datos_tread_ejercicio4 { 
+		  unsigned int thread_id;
+		  ConcurrentHashMap* map;
+		  list<string>::iterator* itera_ini;
+		  list<string>::iterator itera_fin;
+		  pthread_mutex_t* mutex_itera;
+			};
+	   
 		// ConcurrentHashMap count_words(unsigned int n, list<string> archs); // Ejercicio 4
 		// pair<string, unsigned int> maximum(unsigned int p_archivos, unsigned int p_maximos, list<string>archs); // Ejercicio 5
 };
